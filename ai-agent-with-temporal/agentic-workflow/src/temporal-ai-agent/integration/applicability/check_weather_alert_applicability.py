@@ -18,18 +18,18 @@ class WeatherAlertApplicabilityClient:
         self.base_url = base_url.rstrip('/')
         self.endpoint = "/api/v1/weather-alert-management/country-applicability"
     
-    def check_country_applicability(self, country: str) -> ApplicabilityCheckResponseModel:
+    def check_country_applicability(self, input: ApplicabilityCheckRequestModel) -> ApplicabilityCheckResponseModel:
         """
         Check if weather alerts are applicable for a given country.
         
         Args:
-            country: Country name to check applicability for
+            input: ApplicabilityCheckRequestModel containing country information
             
         Returns:
             ApplicabilityResponse object with applicable status
         """
         # Build the full URL
-        url = f"{self.base_url}{self.endpoint}/{country}"
+        url = f"{self.base_url}{self.endpoint}/{input.country}"
         
         try:
             # Make GET request
@@ -77,20 +77,7 @@ class WeatherAlertApplicabilityClient:
                 error=f"Unexpected error: {str(e)}"
             )
     
-    def check_multiple_countries(self, countries: list) -> Dict[str, ApplicabilityCheckResponseModel]:
-        """
-        Check applicability for multiple countries.
-        
-        Args:
-            countries: List of country names to check
-            
-        Returns:
-            Dictionary mapping country names to ApplicabilityResponse objects
-        """
-        results = {}
-        for country in countries:
-            results[country] = self.check_country_applicability(country)
-        return results
+    
 
 
 # Helper function for quick access
@@ -106,7 +93,7 @@ def check_weather_alert_applicability(input: ApplicabilityCheckRequestModel, bas
         Boolean indicating if weather alerts are applicable
     """
     client = WeatherAlertApplicabilityClient(base_url)
-    response = client.check_country_applicability(input.country)
+    response = client.check_country_applicability(input)
     
     if response.error:
         print(f"Error checking applicability for {input.country}: {response.error}")
