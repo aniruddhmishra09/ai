@@ -8,7 +8,7 @@ from temporalio.client import Client
 from temporalio.worker import Worker
 from workflow.weather_management_workflow import WeatherManagementWorkerWorkflow
 
-async def main() -> None:
+async def weather_management_workflow() -> None:
     logging.basicConfig(level=logging.INFO)
 
     # Reduce noise from various libraries
@@ -36,4 +36,4 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(weather_management_workflow())

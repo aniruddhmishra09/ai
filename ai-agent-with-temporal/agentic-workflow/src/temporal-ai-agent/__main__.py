@@ -2,16 +2,17 @@ import sys
 import json
 import importlib.util
 from pathlib import Path
+import asyncio
 
 from model.llm_prompt_model import LLMPromptModel
 from data.load_weather_data import load_weather_data
 from data.weather_record_by_id import weather_record_by_id
 from integration.ollama.llm_prompt_handler import llm_call
-
+from workflow.weather_management_workflow import WeatherManagementWorkerWorkflow
 
 promptQuestion = "Categorize the Season if Weather Description is: "
 
-def main():
+def test_flow_without_workflow():
     """
     Main entry point for the temporal AI agent application.
     """
@@ -74,5 +75,6 @@ if __name__ == "__main__":
     
     print("\n" + "=" * 60)
     print("Welcome to the Weather Management AI Agent!")
-    result = main()
+    #result = test_flow_without_workflow()
+    asyncio.run(WeatherManagementWorkerWorkflow.weather_management_workflow())
     print("\n" + "=" * 60)
