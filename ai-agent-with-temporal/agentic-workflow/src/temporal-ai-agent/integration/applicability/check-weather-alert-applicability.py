@@ -4,8 +4,8 @@ from typing import Dict, Any, Optional
 from dataclasses import dataclass
 
 
-from applicability_response_model import ApplicabilityResponseModel
-
+from model.applicability_response_model import ApplicabilityResponseModel
+from model.applicability_check_request_model  import ApplicabilityCheckRequestModel
 
 class WeatherAlertApplicabilityClient:
     """REST client for checking weather alert applicability by country"""
@@ -96,7 +96,7 @@ class WeatherAlertApplicabilityClient:
 
 
 # Helper function for quick access
-def check_weather_alert_applicability(country: str, base_url: str = "http://localhost:8082") -> bool:
+def check_weather_alert_applicability(input: ApplicabilityCheckRequestModel, base_url: str = "http://localhost:8082") -> ApplicabilityResponseModel:
     """
     Quick function to check if weather alerts are applicable for a country.
     
@@ -108,12 +108,12 @@ def check_weather_alert_applicability(country: str, base_url: str = "http://loca
         Boolean indicating if weather alerts are applicable
     """
     client = WeatherAlertApplicabilityClient(base_url)
-    response = client.check_country_applicability(country)
+    response = client.check_country_applicability(input.country)
     
     if response.error:
-        print(f"Error checking applicability for {country}: {response.error}")
-    
-    return response.applicable
+        print(f"Error checking applicability for {input.country}: {response.error}")
+
+    return response
 
 
 if __name__ == "__main__":
