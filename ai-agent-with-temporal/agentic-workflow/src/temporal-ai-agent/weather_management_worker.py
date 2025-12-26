@@ -2,11 +2,19 @@ import asyncio
 import concurrent.futures
 import logging
 import warnings
-from workflow.activities import llm_call_activity
+#from workflow.activities import llm_call_activity
 from temporalio.client import Client
 from temporalio.worker import Worker
 from weather_management_workflow import WeatherManagementWorkerWorkflow
 
+from temporalio import activity
+from integration.ollama.llm_prompt_handler import llm_call
+from model.llm_prompt_model import LLMPromptModel
+
+@activity.defn
+def llm_call_activity(input: LLMPromptModel) -> str:
+    weather_type = llm_call(input)
+    return weather_type
 
 async def weather_management_worker() -> None:
     logging.basicConfig(level=logging.INFO)

@@ -1,5 +1,3 @@
-import importlib.util
-from pathlib import Path
 from temporalio import activity
 from integration.ollama.llm_prompt_handler import llm_call
 from model.llm_prompt_model import LLMPromptModel

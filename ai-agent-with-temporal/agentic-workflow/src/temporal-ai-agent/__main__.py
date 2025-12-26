@@ -7,6 +7,7 @@ from data.weather_record_by_id import weather_record_by_id
 from integration.ollama.llm_prompt_handler import llm_call
 from weather_management_workflow import WeatherManagementWorkerWorkflow
 from weather_management_worker import weather_management_worker
+import asyncio
 
 promptQuestion = "Categorize the Season if Weather Description is: "
 
@@ -91,7 +92,7 @@ def process(llm_prompt: LLMPromptModel, workflow_type: str):
     if workflow_type == '1':
         process_weather_data_synchronously(llm_prompt)
     elif workflow_type == '2':
-        process_weather_data_with_temporal(llm_prompt)
+        asyncio.run(process_weather_data_with_temporal(llm_prompt))
     else:
         print("Invalid Workflow Type selected. Please choose 1 or 2.")
 
