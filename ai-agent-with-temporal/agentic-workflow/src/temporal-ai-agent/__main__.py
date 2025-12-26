@@ -12,69 +12,92 @@ from workflow.weather_management_workflow import WeatherManagementWorkerWorkflow
 
 promptQuestion = "Categorize the Season if Weather Description is: "
 
-def test_flow_without_workflow():
-    """
-    Main entry point for the temporal AI agent application.
-    """
-    
-    # Fetch weather alerts data
+def prepare_data():
     print("\n" + "=" * 60)
     print("\nFetching weather alerts data...")
     # Store the response in a variable
-    weather_alerts_response = load_weather_data()
+    weather_alerts_data = load_weather_data()
     
-    print(f"Weather alert Fetch Status: {weather_alerts_response['message']}")
-   
+    print(f"Weather alert Fetch Status: {weather_alerts_data['message']}")
+    return weather_alerts_data
+
+def get_user_input():
+    print("\n" + "=" * 60)
+    weather_record_id = input("Enter your Weather Record ID: ").strip()
+    print(f"\nProcessing Weather Record ID: {weather_record_id}")
+
+    # convert input to integer ID
+    try:
+        record_id = int(weather_record_id)
+        return record_id
+    except ValueError:
+        print("Invalid ID provided. Please enter a numeric weather record ID.")
+        return None
+
+def fetch_weather_record(weather_alerts_response, record_id):
+    # Pass the full loader response and numeric id
+    weather_record = weather_record_by_id(weather_alerts_response, record_id)
+    print("\n" + "=" * 60)
     
-    # Check if data was loaded successfully
-    if weather_alerts_response['status'] == 'success':
-        # Store the JSON response
-        weather_data = weather_alerts_response['data']
-        
-        
-        print("\n" + "=" * 60)
-        weather_record_id = input("Enter your Weather Record ID: ").strip()
-        print(f"\nProcessing Weather Record ID: {weather_record_id}")
+    print("Weather Record: \n\n", weather_record)
+    weather_description = weather_record.get("weather_description", "No description available.")
 
-        # convert input to integer ID
-        try:
-            record_id = int(weather_record_id)
-        except ValueError:
-            print("Invalid ID provided. Please enter a numeric weather record ID.")
-            return weather_alerts_response
+    return weather_description
 
-        
+def prepare_llm_prompt(weather_description):
+    llm_prompt = LLMPromptModel(prompt=promptQuestion, data_payload=weather_description)
+    return llm_prompt
 
-        # Pass the full loader response and numeric id
-        weather_record = weather_record_by_id(weather_alerts_response, record_id)
-        print("\n" + "=" * 60)
-        
-        print("Weather Record: \n\n", weather_record)
-        weather_description = weather_record.get("weather_description", "No description available.")
-
-        llm_prompt = LLMPromptModel(prompt=promptQuestion, data_payload=weather_description)
-        
-        weather_type = llm_call(llm_prompt)
-
-        print("\n" + "=" * 60)
-        print("Identified Weather Type from LLM:")
-        print(weather_type)
-        print("\n" + "=" * 60)
+def process_weather_data(llm_prompt: LLMPromptModel):
+    weather_type = llm_call(llm_prompt)
+    print("\n" + "=" * 60)
+    print("Identified Weather Type from LLM:")
+    print(weather_type)
+    print("\n" + "=" * 60)
+    return weather_type
 
 
-        return weather_alerts_response
+def get_workflow_type():
+    print("\n" + "=" * 60)
+    workflow_type = input("Enter your Workflow Type 1: Sync or 2: Temporal").strip()
+    print(f"\nProcessing Workflow Type: {workflow_type}")
+    return workflow_type
+
+def process_weather_data_with_temporal(llm_prompt: LLMPromptModel):   
+    print("\n" + "=" * 60)
+    print("Starting Temporal Workflow Execution...")
+    result = asyncio.run(WeatherManagementWorkerWorkflow().run(llm_prompt))
+    print("\n" + "=" * 60)
+    print("Workflow Execution Result:")
+    print(result)
     
+def process_weather_data_synchronously(llm_prompt: LLMPromptModel):   
+    print("\n" + "=" * 60)
+    print("Starting Synchronous LLM Processing...")
+    result = process_weather_data(llm_prompt)
+    print("\n" + "=" * 60)
+    print("Workflow Execution Result:")
+    print(result)    
+    
+def process(llm_prompt: LLMPromptModel, workflow_type: str):   
+    if workflow_type == '1':
+        process_weather_data_synchronously(llm_prompt)
+    elif workflow_type == '2':
+        process_weather_data_with_temporal(llm_prompt)
     else:
-        print(f"Error: {weather_alerts_response['message']}")
-        return weather_alerts_response
-    
-    
-
+        print("Invalid Workflow Type selected. Please choose 1 or 2.")
 
 if __name__ == "__main__":
     
     print("\n" + "=" * 60)
     print("Welcome to the Weather Management AI Agent!")
-    #result = test_flow_without_workflow()
-    asyncio.run(WeatherManagementWorkerWorkflow.weather_management_workflow())
+    weather_data = prepare_data()
+    record_id = get_user_input()
+    if record_id is not None:
+        weather_description = fetch_weather_record(weather_data, record_id)
+        llm_prompt = prepare_llm_prompt(weather_description)
+        workflow_type = get_workflow_type()
+        process(llm_prompt, workflow_type)
+        
+        
     print("\n" + "=" * 60)
