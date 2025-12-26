@@ -58,7 +58,7 @@ def process_weather_data(llm_prompt: LLMPromptModel):
 
 def get_workflow_type():
     print("\n" + "=" * 60)
-    workflow_type = input("Enter your Workflow Type 1: Sync or 2: Temporal").strip()
+    workflow_type = input("Enter your Workflow Type 1: Sync or 2: Temporal. Please enter 1 or 2: ").strip()
     print(f"\nProcessing Workflow Type: {workflow_type}")
     return workflow_type
 
