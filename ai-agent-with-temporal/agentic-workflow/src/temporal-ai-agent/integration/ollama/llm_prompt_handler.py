@@ -7,7 +7,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.platypus import Flowable, Paragraph, SimpleDocTemplate, Spacer
 
-from llm_prompt_model import LLMPromptModel
+from model.llm_prompt_model import LLMPromptModel
 
 load_dotenv(override=True)
 

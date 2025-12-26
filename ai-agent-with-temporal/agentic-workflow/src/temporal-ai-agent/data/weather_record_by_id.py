@@ -1,7 +1,7 @@
 from typing import Optional, Dict, Any
 
 
-def get_weather_record_by_id(weather_alerts_response: Dict[str, Any], record_id: int) -> Optional[Dict[str, Any]]:
+def weather_record_by_id(weather_alerts_response: Dict[str, Any], record_id: int) -> Optional[Dict[str, Any]]:
 	"""
 	Return a single weather record matching `record_id` from the
 	`weather_alerts_response` returned by the application's loader.
