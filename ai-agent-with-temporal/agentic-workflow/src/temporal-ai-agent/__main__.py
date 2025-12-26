@@ -1,14 +1,12 @@
-import sys
-import json
-import importlib.util
 from pathlib import Path
-import asyncio
-
+from temporalio.client import Client
+from litellm import uuid
 from model.llm_prompt_model import LLMPromptModel
 from data.load_weather_data import load_weather_data
 from data.weather_record_by_id import weather_record_by_id
 from integration.ollama.llm_prompt_handler import llm_call
-from workflow.weather_management_workflow import WeatherManagementWorkerWorkflow
+from weather_management_workflow import WeatherManagementWorkerWorkflow
+from weather_management_worker import weather_management_worker
 
 promptQuestion = "Categorize the Season if Weather Description is: "
 
@@ -63,10 +61,20 @@ def get_workflow_type():
     print(f"\nProcessing Workflow Type: {workflow_type}")
     return workflow_type
 
-def process_weather_data_with_temporal(llm_prompt: LLMPromptModel):   
+async def process_weather_data_with_temporal(llm_prompt: LLMPromptModel):   
     print("\n" + "=" * 60)
     print("Starting Temporal Workflow Execution...")
-    result = asyncio.run(WeatherManagementWorkerWorkflow().run(llm_prompt))
+    client = await Client.connect("localhost:7233")
+
+    handle = await client.start_workflow(
+        WeatherManagementWorkerWorkflow,
+        llm_prompt,
+        id=f"generate-weather-workflow-{uuid.uuid4()}",
+        task_queue="durable",
+    )
+    result = await handle.result()
+
+    
     print("\n" + "=" * 60)
     print("Workflow Execution Result:")
     print(result)

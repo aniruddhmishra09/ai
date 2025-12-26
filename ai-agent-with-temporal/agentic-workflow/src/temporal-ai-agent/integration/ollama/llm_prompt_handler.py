@@ -1,13 +1,14 @@
 import os
 import time
-
 from dotenv import load_dotenv
 from ollama import Client
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.platypus import Flowable, Paragraph, SimpleDocTemplate, Spacer
-
 from model.llm_prompt_model import LLMPromptModel
+import importlib.util
+from pathlib import Path
+
 
 load_dotenv(override=True)
 
@@ -37,13 +38,3 @@ def llm_call(input: LLMPromptModel) -> str:
     response = client.generate(model=OLLAMA_MODEL, prompt=llm_input, stream=False)
     return response.get("response", "")
 
-
-
-##print("\n" + "=" * 60)
-##prompt = "what color I'll get if I mix blue and yellow?"
-##print("\nGetting Result of Prompt. Please wait...")
-##result = llm_call(prompt)
-##print("\n" + "=" * 60)
-##print("Prompt Result: \n")
-##print(result)
-##print("=" * 60 + "\n")

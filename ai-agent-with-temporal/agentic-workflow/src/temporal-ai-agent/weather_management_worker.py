@@ -2,17 +2,17 @@ import asyncio
 import concurrent.futures
 import logging
 import warnings
-
-from activities import llm_activity
+from workflow.activities import llm_call_activity
 from temporalio.client import Client
 from temporalio.worker import Worker
-from workflow.weather_management_workflow import WeatherManagementWorkerWorkflow
+from weather_management_workflow import WeatherManagementWorkerWorkflow
 
-async def weather_management_workflow() -> None:
+
+async def weather_management_worker() -> None:
     logging.basicConfig(level=logging.INFO)
 
     # Reduce noise from various libraries
-    logging.getLogger("LiteLLM").setLevel(logging.WARNING)
+    #logging.getLogger("LiteLLM").setLevel(logging.WARNING)
     logging.getLogger("temporalio").setLevel(logging.WARNING)
     logging.getLogger("openai").setLevel(logging.WARNING)
     logging.getLogger("httpx").setLevel(logging.WARNING)
@@ -28,12 +28,11 @@ async def weather_management_workflow() -> None:
             client,
             task_queue="durable",
             workflows=[WeatherManagementWorkerWorkflow],
-            activities=[llm_activity],
+            activities=[llm_call_activity],
             activity_executor=activity_executor,
         )
         logging.info("Starting the worker....")
         await worker.run()
 
-
 if __name__ == "__main__":
-    asyncio.run(weather_management_workflow())
+    asyncio.run(weather_management_worker())

@@ -2,8 +2,6 @@ import requests
 import json
 from typing import Dict, Any, Optional
 from dataclasses import dataclass
-
-
 from model.applicability_check_response_model import ApplicabilityCheckResponseModel
 from model.applicability_check_request_model  import ApplicabilityCheckRequestModel
 
