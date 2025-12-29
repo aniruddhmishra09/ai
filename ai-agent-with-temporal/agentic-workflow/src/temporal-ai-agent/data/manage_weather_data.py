@@ -112,11 +112,51 @@ def get_weather_by_country(country_name: str) -> Dict[str, Any]:
             "message": f"No weather data found for country: {country_name}"
         }
 
+from typing import Optional, Dict, Any
 
-if __name__ == "__main__":
-    # Test: Load all weather data
-    print("Loading all weather data...")
-    result = load_weather_data()
-    print(json.dumps(result, indent=2))
+
+def weather_record_by_id(weather_alerts_response: Dict[str, Any], record_id: int) -> Optional[Dict[str, Any]]:
+	"""
+	Return a single weather record matching `record_id` from the
+	`weather_alerts_response` returned by the application's loader.
+
+	Args:
+		weather_alerts_response: dict returned by `load_weather_data()` with keys
+			like `status` and `data`.
+		record_id: numeric id of the weather record to find.
+
+	Returns:
+		The matching record dict if found, otherwise None.
+	"""
+	
+	if not weather_alerts_response or not weather_alerts_response.get("data"):
+		return None
+
+	data = weather_alerts_response.get("data", [])
+	for rec in data:
+		if rec is None:
+			continue
+		if str(rec.get("id")) == str(record_id):
+			return rec
+
+	return None
+
+
+def prepare_data():
+    print("\n" + "=" * 60)
+    print("\nFetching weather alerts data...")
+    # Store the response in a variable
+    weather_alerts_data = load_weather_data()
     
-   
+    print(f"Weather alert Fetch Status: {weather_alerts_data['message']}")
+    return weather_alerts_data
+    
+def fetch_weather_record(weather_alerts_response, record_id):
+    # Pass the full loader response and numeric id
+    weather_record = weather_record_by_id(weather_alerts_response, record_id)
+    print("\n" + "=" * 60)
+    
+    print("Weather Record: \n\n", weather_record)
+    weather_description = weather_record.get("weather_description", "No description available.")
+
+    return weather_description 
