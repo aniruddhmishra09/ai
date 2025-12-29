@@ -10,21 +10,14 @@ from weather_management_workflow import WeatherManagementWorkerWorkflow
 from temporalio import activity
 
 ##LLM Call Activity
-from integration.ollama.llm_prompt_handler import llm_call
+from integration.llm.ollama.llm_prompt_handler import llm_call
 from model.llm_prompt_model import LLMPromptModel
 @activity.defn
 def llm_call_activity(input: LLMPromptModel) -> str:
     weather_type = llm_call(input)
     return weather_type
 
-##Applicability Activity
-from integration.applicability.check_weather_alert_applicability import check_weather_alert_applicability
-from model.applicability_check_request_model import ApplicabilityCheckRequestModel
-from model.applicability_check_response_model import ApplicabilityCheckResponseModel
-@activity.defn
-def applicability_activity(input: ApplicabilityCheckRequestModel) -> ApplicabilityCheckResponseModel:
-    applicability_check = check_weather_alert_applicability(input)
-    return applicability_check
+
 
 async def weather_management_worker() -> None:
     logging.basicConfig(level=logging.INFO)
@@ -46,7 +39,7 @@ async def weather_management_worker() -> None:
             client,
             task_queue="durable",
             workflows=[WeatherManagementWorkerWorkflow],
-            activities=[llm_call_activity, applicability_activity],
+            activities=[llm_call_activity],
             activity_executor=activity_executor,
         )
         logging.info("Starting the worker....")
