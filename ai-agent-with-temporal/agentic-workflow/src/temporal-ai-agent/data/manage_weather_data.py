@@ -2,6 +2,7 @@ import json
 import os
 from pathlib import Path
 from typing import Dict, List, Any
+from model.weather_data_model import WeatherDataModel
 
 
 def load_weather_data() -> Dict[str, Any]:
@@ -151,12 +152,20 @@ def prepare_data():
     print(f"Weather alert Fetch Status: {weather_alerts_data['message']}")
     return weather_alerts_data
     
-def fetch_weather_record(weather_alerts_response, record_id):
+def fetch_weather_record(weather_alerts_response, record_id) -> WeatherDataModel:
     # Pass the full loader response and numeric id
     weather_record = weather_record_by_id(weather_alerts_response, record_id)
-    print("\n" + "=" * 60)
+    if weather_record is None: 
+        print(f"No weather record found with ID: {record_id}")
+        return None 
     
-    print("Weather Record: \n\n", weather_record)
-    weather_description = weather_record.get("weather_description", "No description available.")
+    weather_data_model = WeatherDataModel(id=weather_record['id'],
+        country=weather_record['country'],
+        city=weather_record['city'],
+        weather_description=weather_record['weather_description'],
+        wikipedia_url=weather_record['wikipedia_url'])
+    
+    print("\n" + "=" * 60)
+    print("Weather Record: \n\n", weather_data_model)
 
-    return weather_description 
+    return weather_data_model

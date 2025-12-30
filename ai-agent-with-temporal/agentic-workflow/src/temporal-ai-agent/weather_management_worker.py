@@ -18,6 +18,15 @@ def llm_call_activity(input: LLMPromptModel) -> str:
     return weather_type
 
 
+##Applicability Check Activity
+from model.applicability_check_request_model import ApplicabilityCheckRequestModel
+from model.applicability_check_response_model import ApplicabilityCheckResponseModel
+from integration.applicability.check_weather_alert_applicability import check_weather_alert_applicability
+
+@activity.defn
+def applicability_check_activity(input: ApplicabilityCheckRequestModel) -> ApplicabilityCheckResponseModel:
+    applicability_check = check_weather_alert_applicability(input)
+    return applicability_check
 
 async def weather_management_worker() -> None:
     logging.basicConfig(level=logging.INFO)
