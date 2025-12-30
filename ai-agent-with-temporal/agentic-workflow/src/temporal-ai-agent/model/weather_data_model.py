@@ -3,8 +3,7 @@ from dataclasses import dataclass
 
 @dataclass
 class WeatherDataModel:
-    id: str
-    country: str
+    id: int
     country: str
     city: str
     weather_description: str

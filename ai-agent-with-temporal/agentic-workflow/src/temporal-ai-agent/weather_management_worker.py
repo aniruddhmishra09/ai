@@ -48,7 +48,7 @@ async def weather_management_worker() -> None:
             client,
             task_queue="durable",
             workflows=[WeatherManagementWorkerWorkflow],
-            activities=[llm_call_activity],
+            activities=[llm_call_activity, applicability_check_activity],
             activity_executor=activity_executor,
         )
         logging.info("Starting the worker....")
