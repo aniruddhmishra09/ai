@@ -5,6 +5,50 @@ from typing import Dict, List, Any
 from model.weather_data_model import WeatherDataModel
 
 
+def load_weather_management_data_model() -> Dict[str, Any]:
+    """
+    Load weather management data from the JSON file and return as WeatherDataModel list.
+    
+    Returns:
+        Dict containing the JSON response with weather data.
+    """
+    # Get the path to sample_weather_management_data_model.json
+    sample_weather_management_data_model = Path("/Users/apple/Aniruddh/Work/Study/Workspace/ai/ai-agent-with-temporal/data/sample_weather_management_data_model.json")
+    
+    try:
+        with open(sample_weather_management_data_model, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        return {
+            "status": "success",
+            "data": data,
+            "count": len(data),
+            "message": f"Successfully loaded {len(data)} weather management sample model"
+        }
+        
+    
+    except FileNotFoundError:
+        return {
+            "status": "error",
+            "message": f"Weather data file not found at {sample_weather_management_data_model}",
+            "data": None
+        }
+    
+    except json.JSONDecodeError as e:
+        return {
+            "status": "error",
+            "message": f"Error parsing JSON file: {str(e)}",
+            "data": None
+        }
+    
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": f"Unexpected error loading weather data: {str(e)}",
+            "data": None
+        }
+
+
+     
 def load_weather_data() -> Dict[str, Any]:
     """
     Load weather alerts data from the JSON file.

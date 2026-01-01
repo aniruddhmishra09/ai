@@ -11,7 +11,7 @@ from temporalio import activity
 
 ##LLM Call Activity
 from integration.llm.ollama.llm_prompt_handler import llm_call
-from model.llm_prompt_model import LLMPromptModel
+from integration.llm.model.llm_prompt_model import LLMPromptModel
 @activity.defn
 def llm_call_activity(input: LLMPromptModel) -> str:
     weather_type = llm_call(input)
@@ -19,9 +19,9 @@ def llm_call_activity(input: LLMPromptModel) -> str:
 
 
 ##Applicability Check Activity
-from model.applicability_check_request_model import ApplicabilityCheckRequestModel
-from model.applicability_check_response_model import ApplicabilityCheckResponseModel
-from integration.applicability.check_weather_alert_applicability import check_weather_alert_applicability
+from integration.rest_api.model.applicability_check_request_model import ApplicabilityCheckRequestModel
+from integration.rest_api.model.applicability_check_response_model import ApplicabilityCheckResponseModel
+from integration.rest_api.weather_management_api import check_weather_alert_applicability
 
 @activity.defn
 def applicability_check_activity(input: ApplicabilityCheckRequestModel) -> ApplicabilityCheckResponseModel:

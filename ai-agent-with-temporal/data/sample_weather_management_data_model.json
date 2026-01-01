@@ -1,0 +1,22 @@
+{
+    "id":1,
+    "weather_description":"Sunny with light clouds",
+    "weather_category":"Clear",
+    "country":"USA",
+    "city":"San Francisco",
+    "weather_reporter":"John Doe",
+    "weather_activities":[
+        {
+            "activity_id":101,
+            "activity_name":"Hiking",
+            "suitable_time":"Morning",
+            "recommended_gear":["Hiking boots", "Sunscreen", "Water bottle"]
+        },
+        {
+            "activity_id":102,
+            "activity_name":"Picnic",
+            "suitable_time":"Afternoon",
+            "recommended_gear":["Picnic blanket", "Food", "Sunglasses"]
+        }
+    ]
+}

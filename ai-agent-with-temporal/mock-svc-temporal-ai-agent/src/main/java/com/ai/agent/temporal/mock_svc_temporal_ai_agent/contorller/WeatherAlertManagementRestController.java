@@ -1,7 +1,7 @@
 package com.ai.agent.temporal.mock_svc_temporal_ai_agent.contorller;
 
 import com.ai.agent.temporal.mock_svc_temporal_ai_agent.response.CountryApplicabilityDetails;
-import com.ai.agent.temporal.mock_svc_temporal_ai_agent.response.WeatherManagerUserDetails;
+import com.ai.agent.temporal.mock_svc_temporal_ai_agent.response.WeatherReporterDetails;
 import com.ai.agent.temporal.mock_svc_temporal_ai_agent.service.AlertManagementMasterService;
 import com.ai.agent.temporal.mock_svc_temporal_ai_agent.service.WeatherManagerUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -23,15 +23,15 @@ public class WeatherAlertManagementRestController {
     @Autowired
     private AlertManagementMasterService alertManagementMasterService;
 
-    @GetMapping("/user-details/{country}")
-    public ResponseEntity<WeatherManagerUserDetails> getUserDetails(@PathVariable( "country") String country) {
-        log.info("User Details request received for country: {}", country);
-        WeatherManagerUserDetails userDetails = weatherManagerUserService.getUserDetailsByCountry(country);
+    @GetMapping("/weather-reporter/{country}")
+    public ResponseEntity<WeatherReporterDetails> getWeatherReporterDetails(@PathVariable( "country") String country) {
+        log.info("Weather Reporter request received for country: {}", country);
+        WeatherReporterDetails userDetails = weatherManagerUserService.getUserDetailsByCountry(country);
         if (userDetails != null) {
-            log.info("User Details found: {}", userDetails);
+            log.info("Weather Reporter Details found: {}", userDetails);
             return ResponseEntity.ok(userDetails);
         } else {
-            log.info("No User Details found for country: {}", country);
+            log.info("Weather Reporter Details not found for country: {}", country);
             return ResponseEntity.notFound().build();
         }
     }

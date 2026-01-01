@@ -1,7 +1,7 @@
 ##Applicability Check Activity
-from model.applicability_check_request_model import ApplicabilityCheckRequestModel
-from model.applicability_check_response_model import ApplicabilityCheckResponseModel
-from integration.applicability.check_weather_alert_applicability import check_weather_alert_applicability
+from integration.rest_api.model.applicability_check_request_model import ApplicabilityCheckRequestModel
+from integration.rest_api.model.applicability_check_response_model import ApplicabilityCheckResponseModel
+from integration.rest_api.weather_management_api import check_weather_alert_applicability
 from temporalio import activity
 
 @activity.defn

@@ -3,18 +3,26 @@ from temporalio import workflow
 
 
 with workflow.unsafe.imports_passed_through():
+    ##Activities Imports
     from workflow.activities.applicability_check_activity import applicability_check_activity
     from workflow.activities.llm_call_activity import llm_call_activity
-    from model.workflow_request_model import WorkFlowRequestModel   
-    from process.prepare_workflow_request import prepare_llm_prompt_from_workflow_request
-    from process.prepare_workflow_request import prepare_applicability_check_from_workflow_request
+    from workflow.activities.fetch_weather_reporter_activity import fetch_weather_reporter_activity
+    ##Model Imports
+    from model.workflow_request_model import WorkFlowRequestModel 
+    ##Prepare Request Imports  
+    from process.prepare_workflow_request import prepare_weather_category_llm_prompt
+    from process.prepare_workflow_request import prepare_applicability_check_request
+    from process.prepare_workflow_request import prepare_weather_reporter_request
+    
     
 
 
 @workflow.defn
 class WeatherManagementWorkerWorkflow:
+    
+    
     @workflow.run
-    async def run(self, workflow_request: WorkFlowRequestModel) -> str:
+    async def run(self, workflow_request: WorkFlowRequestModel) -> WorkFlowRequestModel:
         
         """Workflow to manage weather-related tasks using LLM calls."""
         
@@ -23,7 +31,7 @@ class WeatherManagementWorkerWorkflow:
         print("Starting Weather Management Workflow...")
         print("\n" + "=" * 60)
         print("Preparing Applicability Check Request...")
-        applicability_check_request = prepare_applicability_check_from_workflow_request(workflow_request)
+        applicability_check_request = prepare_applicability_check_request(workflow_request)
 
         print("\n" + "=" * 60)
         print("Executing Applicability Check Activity...")
@@ -40,21 +48,39 @@ class WeatherManagementWorkerWorkflow:
             return f"Weather alert not applicable. Reason: {applicability_response.error}"
         
         print("\n" + "=" * 60)
-        print("Applicability Check Passed. Proceeding to LLM Call...")
+        print("Applicability Check Passed. Proceeding to LLM Call to identify Weather Category...")
         print("\n" + "=" * 60)
         print("Preparing LLM Prompt from Workflow Request...")
         ##LLM Call Activity Call
-        prompt = prepare_llm_prompt_from_workflow_request(workflow_request)
+        weather_category_llm_prompt = prepare_weather_category_llm_prompt(workflow_request)
 
         print("\n" + "=" * 60)
-        print("Executing LLM Call Activity...")
-        llm_response = await workflow.execute_activity(
+        print("Executing LLM Call Activity to identify Weather Category...")
+        weather_category = await workflow.execute_activity(
             llm_call_activity,
-            prompt,
+            weather_category_llm_prompt,
             start_to_close_timeout=timedelta(seconds=30),
         )
-        print("LLM Call Completed.")
+        print("LLM Call Completed to identify Weather Category.")
         print("\n" + "=" * 60)
-        print("LLM Response:", llm_response)
-        return llm_response
+        print("LLM Response for Weather Category:", weather_category)
+        print("LLM call passed. Proceeding to fetch Weather Reporter based on Country...")
+
+        print("\n" + "=" * 60)
+        print("Preparing Weather-Reporter-Request to fetch Weather Reporter based on Country...")
+        weather_reporter_request = prepare_weather_reporter_request(workflow_request)
+        print("\n" + "=" * 60)
+        print("Executing Fetch Weather Reporter Activity to fetch Weather Reporter...")
+        weather_reporter_response = await workflow.execute_activity(
+            fetch_weather_reporter_activity,
+            weather_reporter_request,
+            start_to_close_timeout=timedelta(seconds=30),
+        )
+        print("Fetch Weather Reporter Activity Completed.")
+
+
+        print("\n" + "=" * 60)
+        print("Workflow Execution Completed.")
+
+        return weather_category
           

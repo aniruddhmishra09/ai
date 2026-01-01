@@ -8,3 +8,4 @@ class WeatherDataModel:
     city: str
     weather_description: str
     wikipedia_url: str
+    weather_category: str

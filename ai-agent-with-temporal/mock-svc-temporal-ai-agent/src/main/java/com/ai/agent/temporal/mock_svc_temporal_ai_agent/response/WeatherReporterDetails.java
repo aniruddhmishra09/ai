@@ -9,9 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class WeatherManagerUserDetails {
-    private String userId;
-    private String userName;
-
-
+public class WeatherReporterDetails {
+    private String reporterName;
+    private String reporterUserName;
 }

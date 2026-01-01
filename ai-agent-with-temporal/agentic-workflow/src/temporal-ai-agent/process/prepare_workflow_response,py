@@ -1,0 +1,16 @@
+from model.workflow_response_model import WorkFlowResponseModel
+from model.weather_data_model import WeatherDataModel
+
+def prepare_workflow_response(weather_category: str, country: str, weather_description: str, wikipedia_url: str) -> WorkFlowResponseModel:
+    weathe_data_model = WeatherDataModel(
+        weather_category=weather_category,
+        country=country,
+        weather_description=weather_description,
+        wikipedia_url=wikipedia_url
+    )
+
+    workflow_response = WorkFlowResponseModel(
+
+        weathe_data_model=weathe_data_model
+    )
+    return workflow_response
