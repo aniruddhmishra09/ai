@@ -4,9 +4,9 @@ from litellm import uuid
 from model.workflow_request_model import WorkFlowRequestModel
 from model.workflow_response_model import WorkFlowResponseModel
 
-async def process_weather_data_with_temporal(workflow_request: WorkFlowRequestModel):   
+async def process_weather_data_with_temporal(workflow_request: WorkFlowRequestModel) -> WorkFlowResponseModel:   
     print("\n" + "=" * 60)
-    print("Starting Temporal Workflow Execution...")
+    print("Temporal Workflow Execution - Start")
     client = await Client.connect("localhost:7233")
 
     handle = await client.start_workflow(
@@ -16,8 +16,6 @@ async def process_weather_data_with_temporal(workflow_request: WorkFlowRequestMo
         task_queue="durable",
     )
     result = await handle.result()
-
-    
+    print("Temporal Workflow Execution - End")
     print("\n" + "=" * 60)
-    print("Workflow Execution Result:")
-    print(result)
+    return result

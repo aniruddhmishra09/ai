@@ -1,7 +1,6 @@
 import json
-import os
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Dict, Any
 from model.weather_data_model import WeatherDataModel
 
 
@@ -209,7 +208,7 @@ def fetch_weather_record(weather_alerts_response, record_id) -> WeatherDataModel
         weather_description=weather_record['weather_description'],
         wikipedia_url=weather_record['wikipedia_url'])
     
-
-    print("Weather Record: \n\n", weather_data_model)
+    
+    print("Weather Record: \n\n", json.dumps(weather_data_model, default=vars , indent=4))
 
     return weather_data_model

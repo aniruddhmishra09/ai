@@ -69,8 +69,6 @@ class WeatherManagementWorkerWorkflow:
         ##LLM Call Activity Call to check Weather Category - End
 
 
-
-
         ##Fetch Weather Reporter Activity Call - Start
         print("\n" + "=" * 60)
         print("Preparing Weather-Reporter-Request to fetch Weather Reporter based on Country...")
@@ -95,11 +93,8 @@ class WeatherManagementWorkerWorkflow:
         )
       
         print("Final Workflow Response Prepared Successfully." )
-        print("Workflow Response:", workflow_response)
         ##Prepare Final Workflow Response - End
-
-
-
+        
         print("\n" + "=" * 60)
         print("Workflow Execution Completed.")
 

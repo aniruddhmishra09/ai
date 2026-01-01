@@ -7,11 +7,12 @@ from process.prepare_workflow_request import prepare_weather_reporter_request
 from integration.llm.manage_llm_prompt import process_llm_prompt
 from integration.rest_api.model.weather_reporter_response_model import WeatherReporterResponseModel
 from integration.rest_api.weather_management_api import fetch_weather_reporter_by_country
+from model.workflow_response_model import WorkFlowResponseModel
 
 ##Prepare Response Imports  
 from process.prepare_workflow_response import prepare_workflow_response
 
-def process_weather_data_synchronously(workflow_request: WorkFlowRequestModel) -> str:   
+def process_weather_data_synchronously(workflow_request: WorkFlowRequestModel) -> WorkFlowResponseModel:   
     
     print("\n" + "=" * 60)
     print("Synchronously - Starting Weather Management Workflow...")
@@ -67,7 +68,7 @@ def process_weather_data_synchronously(workflow_request: WorkFlowRequestModel) -
         )
       
     print("Final Workflow Response Prepared Successfully." )
-    print("Workflow Response:", workflow_response)
+    ##print("Workflow Response:", workflow_response)
     ##Prepare Final Workflow Response - End
 
 
