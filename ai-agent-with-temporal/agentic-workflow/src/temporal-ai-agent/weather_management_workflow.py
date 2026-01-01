@@ -24,7 +24,7 @@ class WeatherManagementWorkerWorkflow:
     
     
     @workflow.run
-    async def run(self, workflow_request: WorkFlowRequestModel) -> WorkFlowRequestModel:
+    async def run(self, workflow_request: WorkFlowRequestModel) -> WorkFlowResponseModel:
         
         """Workflow to manage weather-related tasks using LLM calls."""
         
@@ -89,10 +89,10 @@ class WeatherManagementWorkerWorkflow:
         print("\n" + "=" * 60)
         print("Preparing Final Workflow Response..." )
         workflow_response = prepare_workflow_response(
-            weather_category=weather_category,
-            weather_reporter=weather_reporter_response,
-            weather_description=weather_category,
-            wikipedia_url=weather_reporter_response.wikipedia_url)
+                    weather_category=weather_category,
+                    workflow_request=workflow_request,
+                    weather_reporter=weather_reporter_response,
+        )
       
         print("Final Workflow Response Prepared Successfully." )
         print("Workflow Response:", workflow_response)
