@@ -188,7 +188,7 @@ def weather_record_by_id(weather_alerts_response: Dict[str, Any], record_id: int
 
 
 def prepare_data():
-    print("\n" + "=" * 60)
+    
     print("\nFetching weather alerts data...")
     # Store the response in a variable
     weather_alerts_data = load_weather_data()
@@ -209,7 +209,7 @@ def fetch_weather_record(weather_alerts_response, record_id) -> WeatherDataModel
         weather_description=weather_record['weather_description'],
         wikipedia_url=weather_record['wikipedia_url'])
     
-    print("\n" + "=" * 60)
+
     print("Weather Record: \n\n", weather_data_model)
 
     return weather_data_model

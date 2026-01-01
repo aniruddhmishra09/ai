@@ -2,13 +2,13 @@ import requests
 import json
 from typing import Dict, Any, Optional
 
-from model.applicability_check_response_model import ApplicabilityCheckResponseModel
-from model.applicability_check_request_model  import ApplicabilityCheckRequestModel
-from model.weather_reporter_response_model import WeatherReporterResponseModel
-from model.weather_reporter_request_model  import WeatherReporterRequestModel
+from integration.rest_api.model.applicability_check_response_model import ApplicabilityCheckResponseModel
+from integration.rest_api.model.applicability_check_request_model  import ApplicabilityCheckRequestModel
+from integration.rest_api.model.weather_reporter_response_model import WeatherReporterResponseModel
+from integration.rest_api.model.weather_reporter_request_model  import WeatherReporterRequestModel
 
-country_applicability_url = "/api/v1/weather-alert-management/country-applicability"
-weather_reporter_url = "/api/v1/weather-alert-management/weather-reporter"
+country_applicability_url = "/country-applicability"
+weather_reporter_url = "/weather-reporter"
 weather_management_host_url = "http://localhost:8082"
 weather_management_api_url = "/api/v1/weather-alert-management"
 
@@ -22,9 +22,9 @@ class WeatherManagementApiClient:
         Args:
             base_url: Base URL of the API server (default: http://localhost:8082)
         """
- 
-        self.check_country_applicability_endpoint = f"{self.weather_management_host_url}{self.weather_management_api_url}{country_applicability_url}"
-        self.weather_reporter_endpoint = f"{self.weather_management_host_url}{self.weather_management_api_url}{weather_reporter_url}"
+        self.weather_management_host_url = weather_management_host_url.rstrip('/')
+        self.check_country_applicability_endpoint = f"{self.weather_management_host_url}{weather_management_api_url}{country_applicability_url}"
+        self.weather_reporter_endpoint = f"{self.weather_management_host_url}{weather_management_api_url}{weather_reporter_url}"
 
     def fetch_weather_reporter_by_country(self, input: WeatherReporterRequestModel) -> WeatherReporterResponseModel:
         """
@@ -34,8 +34,8 @@ class WeatherManagementApiClient:
             input: WeatherReporterRequestModel containing country information
         """
         # Build the full URL
-        url = f"{self.weather_reporter_endpoint}/{input.country_name}"
-        
+        url = f"{self.weather_reporter_endpoint}/{input.country}"
+       
         try:
             # Make GET request
             response = requests.get(url, timeout=10)
@@ -99,6 +99,7 @@ class WeatherManagementApiClient:
             ApplicabilityResponse object with applicable status
         """
         # Build the full URL
+        
         url = f"{self.check_country_applicability_endpoint}/{input.country}"
         
         try:
@@ -169,7 +170,7 @@ def check_weather_alert_applicability(input: ApplicabilityCheckRequestModel, bas
 
     return response
 
-def fetch_weather_reporter_by_country(country_name: str, base_url: str = "http://localhost:8082") -> WeatherReporterResponseModel:
+def fetch_weather_reporter_by_country(input: WeatherReporterRequestModel, base_url: str = "http://localhost:8082") -> WeatherReporterResponseModel:
     """
     Fetch weather reporter information for a specific country.
     
@@ -178,11 +179,10 @@ def fetch_weather_reporter_by_country(country_name: str, base_url: str = "http:/
         base_url: API server URL (default: http://localhost:8082)
     """
     client = WeatherManagementApiClient(base_url)
-    input_model = WeatherReporterRequestModel(country_name=country_name)
-    response = client.fetch_weather_reporter_by_country(input_model)
+    response = client.fetch_weather_reporter_by_country(input)
     
     if response.error:
-        print(f"Error fetching weather reporter for {country_name}: {response.error}")
+        print(f"Error fetching weather reporter for {input.country}: {response.error}")
 
     return response
     

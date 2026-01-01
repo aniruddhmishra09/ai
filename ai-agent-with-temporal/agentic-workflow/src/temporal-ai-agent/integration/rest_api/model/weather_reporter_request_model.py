@@ -3,4 +3,4 @@ from typing import Optional
 
 @dataclass
 class WeatherReporterRequestModel:
-    country_name: str
+    country: str

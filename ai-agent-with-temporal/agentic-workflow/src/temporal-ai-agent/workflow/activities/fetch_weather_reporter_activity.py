@@ -6,5 +6,5 @@ from temporalio import activity
 
 @activity.defn
 def fetch_weather_reporter_activity(input: WeatherReporterRequestModel) -> WeatherReporterResponseModel:
-    weather_reporter = fetch_weather_reporter_by_country(input)
-    return weather_reporter
+    weather_reporter_response = fetch_weather_reporter_by_country(input)
+    return weather_reporter_response

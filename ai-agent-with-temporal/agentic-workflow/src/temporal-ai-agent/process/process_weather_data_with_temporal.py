@@ -1,7 +1,8 @@
 from weather_management_workflow import WeatherManagementWorkerWorkflow
 from temporalio.client import Client
 from litellm import uuid
-from workflow_response_model import WorkFlowRequestModel
+from model.workflow_request_model import WorkFlowRequestModel
+from model.workflow_response_model import WorkFlowResponseModel
 
 async def process_weather_data_with_temporal(workflow_request: WorkFlowRequestModel):   
     print("\n" + "=" * 60)

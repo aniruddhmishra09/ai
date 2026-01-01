@@ -28,6 +28,17 @@ def applicability_check_activity(input: ApplicabilityCheckRequestModel) -> Appli
     applicability_check = check_weather_alert_applicability(input)
     return applicability_check
 
+##Weather Reporter Activity
+from integration.rest_api.model.weather_reporter_request_model import WeatherReporterRequestModel
+from integration.rest_api.model.weather_reporter_response_model import WeatherReporterResponseModel
+from integration.rest_api.weather_management_api import fetch_weather_reporter_by_country
+from temporalio import activity
+
+@activity.defn
+def fetch_weather_reporter_activity(input: WeatherReporterRequestModel) -> WeatherReporterResponseModel:
+    weather_reporter = fetch_weather_reporter_by_country(input)
+    return weather_reporter
+
 async def weather_management_worker() -> None:
     logging.basicConfig(level=logging.INFO)
 
@@ -48,7 +59,7 @@ async def weather_management_worker() -> None:
             client,
             task_queue="durable",
             workflows=[WeatherManagementWorkerWorkflow],
-            activities=[llm_call_activity, applicability_check_activity],
+            activities=[llm_call_activity, applicability_check_activity,fetch_weather_reporter_activity],
             activity_executor=activity_executor,
         )
         logging.info("Starting the worker....")

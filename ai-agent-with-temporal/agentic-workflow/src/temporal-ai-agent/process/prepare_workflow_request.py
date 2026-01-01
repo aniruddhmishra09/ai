@@ -6,16 +6,16 @@ from model.weather_data_model import WeatherDataModel
 from integration.rest_api.model.applicability_check_request_model import ApplicabilityCheckRequestModel
 from integration.rest_api.model.weather_reporter_request_model import WeatherReporterRequestModel
 
+promptQuestion_weatherType = "Categorize the Season if Weather Description is: "
+
 def prepare_workflow_request(weather_data_model: WeatherDataModel) -> WorkFlowRequestModel:
     workflow_request = WorkFlowRequestModel(
         weather_record=weather_data_model,
-        
     )
-    
     return workflow_request
 
 def prepare_weather_category_llm_prompt(workflow_request: WorkFlowRequestModel) -> LLMPromptModel:
-    llm_prompt = prepare_llm_prompt(workflow_request.weather_record.weather_description)
+    llm_prompt = prepare_llm_prompt(promptQuestion_weatherType, workflow_request.weather_record.weather_description)
     return llm_prompt
     
 def prepare_applicability_check_request(workflow_request: WorkFlowRequestModel) -> ApplicabilityCheckRequestModel:
