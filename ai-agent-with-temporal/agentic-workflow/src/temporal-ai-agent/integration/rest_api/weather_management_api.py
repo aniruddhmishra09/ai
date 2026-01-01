@@ -1,6 +1,5 @@
 import requests
 import json
-from typing import Dict, Any, Optional
 
 from integration.rest_api.model.applicability_check_response_model import ApplicabilityCheckResponseModel
 from integration.rest_api.model.applicability_check_request_model  import ApplicabilityCheckRequestModel

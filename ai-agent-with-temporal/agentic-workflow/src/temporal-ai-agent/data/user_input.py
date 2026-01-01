@@ -1,5 +1,3 @@
-
-
 def select_weather_record():
     weather_record_id = input("Enter your Weather Record ID: ").strip()
     print(f"\nProcessing Weather Record ID: {weather_record_id}")

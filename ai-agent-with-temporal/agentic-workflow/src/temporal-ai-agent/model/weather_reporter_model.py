@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 
-
 @dataclass
 class WeatherReporterModel:
     reporter_name: str

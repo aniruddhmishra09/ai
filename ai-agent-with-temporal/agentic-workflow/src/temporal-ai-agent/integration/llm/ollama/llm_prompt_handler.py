@@ -1,9 +1,6 @@
 import os
 from dotenv import load_dotenv
 from ollama import Client
-from reportlab.lib.pagesizes import letter
-from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
-from reportlab.platypus import Flowable, Paragraph, SimpleDocTemplate, Spacer
 from integration.llm.model.llm_prompt_model import LLMPromptModel
 
 

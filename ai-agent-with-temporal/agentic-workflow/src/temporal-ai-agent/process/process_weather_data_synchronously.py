@@ -5,7 +5,6 @@ from process.prepare_workflow_request import prepare_weather_category_llm_prompt
 from process.prepare_workflow_request import prepare_applicability_check_request
 from process.prepare_workflow_request import prepare_weather_reporter_request
 from integration.llm.manage_llm_prompt import process_llm_prompt
-from integration.rest_api.model.weather_reporter_response_model import WeatherReporterResponseModel
 from integration.rest_api.weather_management_api import fetch_weather_reporter_by_country
 from model.workflow_response_model import WorkFlowResponseModel
 
