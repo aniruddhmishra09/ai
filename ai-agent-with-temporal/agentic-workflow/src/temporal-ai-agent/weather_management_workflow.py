@@ -15,7 +15,7 @@ with workflow.unsafe.imports_passed_through():
     from process.prepare_workflow_request import prepare_weather_category_llm_prompt
     from process.prepare_workflow_request import prepare_applicability_check_request
     from process.prepare_workflow_request import prepare_weather_reporter_request
-    from process.prepare_workflow_request import prepare_weather_outdoor_activities_llm_prompt
+    
     ##Prepare Response Imports  
     from process.prepare_workflow_response import prepare_workflow_response
     
@@ -70,18 +70,18 @@ class WeatherManagementWorkerWorkflow:
         ##LLM Call Activity Call to check Weather Category - End
 
         ##LLM Call Activity Call to check Weather Outdoor Activities - Start
-        print("\n" + "=" * 60)
-        print("Preparing LLM Prompt from Workflow Request...")
-        weather_outdoor_activities_llm_prompt = prepare_weather_outdoor_activities_llm_prompt(workflow_request)
-        print("Executing LLM Call Activity to identify Weather Outdoor Activities...")
-        weather_outdoor_activities = await workflow.execute_activity(
-            llm_call_activity,
-            weather_outdoor_activities_llm_prompt,
-            start_to_close_timeout=timedelta(seconds=30),
-        )
-        print("LLM Call Completed to identify Weather Outdoor Activities.")
-        print("LLM Response for Weather Outdoor Activities:", weather_outdoor_activities)
-        print("LLM call passed. Proceeding to fetch Weather Reporter based on Country...")
+        #print("\n" + "=" * 60)
+        #print("Preparing LLM Prompt from Workflow Request...")
+        #weather_outdoor_activities_llm_prompt = prepare_weather_outdoor_activities_llm_prompt(workflow_request)
+        #print("Executing LLM Call Activity to identify Weather Outdoor Activities...")
+        #weather_outdoor_activities = await workflow.execute_activity(
+        #    llm_call_activity,
+        #    weather_outdoor_activities_llm_prompt,
+        #    start_to_close_timeout=timedelta(seconds=30),
+        #)
+        #print("LLM Call Completed to identify Weather Outdoor Activities.")
+        #print("LLM Response for Weather Outdoor Activities:", weather_outdoor_activities)
+        #print("LLM call passed. Proceeding to fetch Weather Reporter based on Country...")
         ##LLM Call Activity Call to check Weather Outdoor Activities - End
 
 

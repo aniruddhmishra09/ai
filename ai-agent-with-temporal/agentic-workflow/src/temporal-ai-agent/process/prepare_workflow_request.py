@@ -5,8 +5,11 @@ from model.weather_data_model import WeatherDataModel
 from integration.rest_api.model.applicability_check_request_model import ApplicabilityCheckRequestModel
 from integration.rest_api.model.weather_reporter_request_model import WeatherReporterRequestModel
 
+
 promptQuestion_weatherType = "Categorize the Season if Weather Description is: "
 promptQuestion_weatherActivities = "Suggest 5 Outdoor Activities suitable for the Season if Weather Description is: "
+
+
 
 def prepare_workflow_request(weather_data_model: WeatherDataModel) -> WorkFlowRequestModel:
     workflow_request = WorkFlowRequestModel(
